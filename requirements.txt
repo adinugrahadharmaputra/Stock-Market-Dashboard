@@ -1,0 +1,8 @@
+yfinance
+streamlit
+altair
+plotly
+watchdog
+stocknews
+scikit-learn
+prophet
