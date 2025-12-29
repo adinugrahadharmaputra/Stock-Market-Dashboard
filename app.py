@@ -199,21 +199,39 @@ def walk_forward_backtest_prophet(df, horizon=5, step=5, start_size=100):
 
 
 # =========================================================
-# Sidebar
+# Sidebar Input
 # =========================================================
-ticker = st.sidebar.text_input("Ticker", "AAPL")
+st.sidebar.header("🔍 Stock Lookup")
+ticker = st.sidebar.text_input("Enter ticker symbol", "AAPL")
 symbol = ticker
-
 
 # =========================================================
 # Company Information
 # =========================================================
 information = fetch_stock_info(symbol)
 
-st.header("Company Information")
-st.subheader(f"Name: {information['longName']}")
-st.subheader(f"Market Cap: ${information['marketCap']:,}")
-st.subheader(f"Sector: {information['sector']}")
+# Display company logo if available
+if information.get("logo_url"):
+    st.image(information["logo_url"], width=150)
+
+st.markdown(f"## 🏢 {information.get('longName', 'N/A')}")
+st.markdown(f"### 📊 Sector: {information.get('sector', 'N/A')}")
+
+# Market cap using metric
+market_cap = information.get('marketCap')
+if market_cap:
+    st.metric(label="Market Capitalization", value=f"${market_cap:,}")
+
+# Optional: Add more key stats if available
+pe_ratio = information.get("trailingPE")
+if pe_ratio:
+    st.metric(label="P/E Ratio", value=f"{pe_ratio:.2f}")
+
+# Summary or description
+description = information.get("longBusinessSummary")
+if description:
+    st.markdown("### 📝 About the Company")
+    st.write(description)
 
 
 # =========================================================
