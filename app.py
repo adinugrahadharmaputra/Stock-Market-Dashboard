@@ -30,21 +30,21 @@ st.set_page_config(
 # =========================================================
 # Cached data fetchers
 # =========================================================
-@st.cache_data
+@st.cache_data(ttl=3600) 
 def fetch_stock_info(symbol):
     return yf.Ticker(symbol).info
 
 
-@st.cache_data
+@st.cache_data(ttl=3600) 
 def fetch_quarterly_financials(symbol):
     return yf.Ticker(symbol).quarterly_financials.T
 
 
-@st.cache_data
+@st.cache_data(ttl=3600) 
 def fetch_anual_financials(symbol):
     return yf.Ticker(symbol).financials.T
 
-
+@st.cache_data(ttl=3600) 
 def fetch_price_history(
     symbol,
     period,
@@ -81,7 +81,7 @@ def fetch_price_history(
     return df
 
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=3600) 
 def fetch_news(ticker):
     return StockNews(ticker, save_news=False).read_rss()
 
@@ -344,7 +344,7 @@ with price_data:
             period = st.selectbox(
                 "Period",
                 ['1d', '5d', '1mo', '3mo', '6mo', 'ytd', '1y', '3y', '5y', '10y', 'max'],
-                index=6
+                index=5
             )
 
             interval_options = {
